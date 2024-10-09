@@ -19,21 +19,20 @@ import org.springframework.web.cors.CorsConfigurationSource;
 public class SecurityConfiguration{
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
+    private final CorsConfigurationSource corsConfigurationSource;
     private final JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
-    private final CorsConfigurationSource configuration;
 
-    public SecurityConfiguration(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-                                 JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter, CorsConfigurationSource configuration
+    public SecurityConfiguration(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,CorsConfigurationSource corsConfigurationSource,
+                                 JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter
     ) {
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.corsConfigurationSource = corsConfigurationSource;
         this.jwtTokenAuthenticationFilter = jwtTokenAuthenticationFilter;
-        this.configuration = configuration;
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
-                .cors(cors -> cors.configurationSource(configuration))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(eH -> eH.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(authorizeRequests ->

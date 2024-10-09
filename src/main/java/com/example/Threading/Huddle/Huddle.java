@@ -19,4 +19,5 @@ public class Huddle {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID uuid;
     private String name;
+    private String avatar;
 }

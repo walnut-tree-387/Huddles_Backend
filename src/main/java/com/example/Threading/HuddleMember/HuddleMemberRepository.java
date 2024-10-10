@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface HuddleMemberRepository extends JpaRepository<HuddleMember, UUID> {
     @Query("SELECT hm FROM HuddleMember hm WHERE hm.huddle.uuid = :huddleUuid")
     List<HuddleMember> getMembersByIdHuddleUuid(@Param("huddleUuid") UUID huddleUuid);
-    @Query("    SELECT hm.joinedAt as joinedAt, hm.huddleRole as huddleRole, appUser.name as memberName, appUser.uuid as memberUuid" +
+    @Query("    SELECT hm.joinedAt as joinedAt, hm.huddleRole as huddleRole, appUser.name as name, appUser.uuid as memberUuid" +
             "   FROM HuddleMember hm" +
             "   JOIN AppUser appUser ON appUser.uuid = hm.member.uuid" +
             "   WHERE hm.huddle.uuid = :huddleUuid")
@@ -32,7 +32,7 @@ public interface HuddleMemberRepository extends JpaRepository<HuddleMember, UUID
     interface huddleMember {
         Long getJoinedAt();
         HuddleRole getHuddleRole();
-        String getMemberName();
+        String getName();
         UUID getMemberUuid();
     }
 }

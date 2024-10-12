@@ -33,19 +33,23 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         String requestHeader = request.getHeader("Authorization");
         String username = null;
         String token = null;
-        if(requestHeader!= null && requestHeader.startsWith("Bearer")){
-            token = requestHeader.substring(7);
-            username = jwtHelper.getUsernameFromToken(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if(jwtHelper.validateToken(token, userDetails)){
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.info("Successful Token Validation. User access granted");
+        try{
+            if(requestHeader!= null && requestHeader.startsWith("Bearer")){
+                token = requestHeader.substring(7);
+                username = jwtHelper.getUsernameFromToken(token);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                if(jwtHelper.validateToken(token, userDetails)){
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    log.info("Successful Token Validation. User access granted");
+                }
+                else{
+                    log.info("Token verification failed");
+                }
             }
-            else{
-                log.info("Token verification failed");
-            }
+        }catch (Exception e){
+            throw new RuntimeException("Jwt Filter failed to process request", e);
         }
         filterChain.doFilter(request, response);
     }

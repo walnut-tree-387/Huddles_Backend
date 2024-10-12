@@ -47,4 +47,9 @@ public class HuddleServiceImpl implements HuddleService{
         if(huddleOptional.isEmpty()) throw new RuntimeException("Huddle couldn't be found with this uuid " + uuid);
         return huddleOptional.get();
     }
+
+    @Override
+    public List<HuddleGetDto> getAllHuddlesOfLoggedInUser(UUID userUuid) {
+        return SystemMapper.toDtoList(huddleRepository.findUserHuddles(userUuid), HuddleGetDto.class);
+    }
 }

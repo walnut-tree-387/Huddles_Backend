@@ -37,6 +37,8 @@ public class AppUserDetailsService implements UserDetailsService {
         LoginResponseDto responseDto = new LoginResponseDto();
         responseDto.setToken(jwtHelper.generateToken(buildUserDetails(user), user.getEmail()));
         responseDto.setUserRole(user.getUserRole());
+        responseDto.setName(user.getName());
+        responseDto.setUuid(user.getUuid());
         return responseDto;
     }
     public AppUser getLoggedInUser(){

@@ -9,7 +9,9 @@ import java.util.UUID;
 public interface AppUserService {
     void create(AppUserCreateDto createDto);
 
-    List<AppUserGetDto> getUsers();
+    List<AppUserGetDto> getUsersExceptCurrentUser();
+    List<AppUserGetDto> getUsersNotInAHuddle(UUID huddleUuid);
     AppUser getUserByUuid(UUID uuid);
     AppUser getByUserName(String userName);
+    AppUser getCurrentUser();
 }

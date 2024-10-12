@@ -34,7 +34,7 @@ public class SecurityConfiguration{
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling(eH -> eH.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+//                .exceptionHandling(eH -> eH.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/api/users/authenticate", "/api/users/register").permitAll()

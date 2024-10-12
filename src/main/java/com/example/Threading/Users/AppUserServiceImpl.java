@@ -3,6 +3,9 @@ package com.example.Threading.Users;
 import com.example.Threading.Helpers.SystemMapper;
 import com.example.Threading.Users.Dto.AppUserCreateDto;
 import com.example.Threading.Users.Dto.AppUserGetDto;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,8 +29,13 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public List<AppUserGetDto> getUsers() {
-        return SystemMapper.toDtoList(appUserRepository.findAll(), AppUserGetDto.class);
+    public List<AppUserGetDto> getUsersExceptCurrentUser() {
+        return SystemMapper.toDtoList(appUserRepository.findAllExceptCurrentUser(getCurrentUser().getUuid()), AppUserGetDto.class);
+    }
+
+    @Override
+    public List<AppUserGetDto> getUsersNotInAHuddle(UUID huddleUuid) {
+        return SystemMapper.toDtoList(appUserRepository.findAllFilteredByHuddle(huddleUuid), AppUserGetDto.class);
     }
 
     @Override
@@ -42,5 +50,11 @@ public class AppUserServiceImpl implements AppUserService {
         Optional<AppUser> userOptional = appUserRepository.getUserByUserName(userName);
         if(userOptional.isEmpty()) throw new RuntimeException("User couldn't be found with this userName " + userName);
         return userOptional.get();
+    }
+
+    @Override
+    public AppUser getCurrentUser() {;
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return getByUserName(userDetails.getUsername());
     }
 }

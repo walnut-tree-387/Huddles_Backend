@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RequestMapping("/api/users")
 @RestController
 public class AppUserController {
@@ -26,8 +28,8 @@ public class AppUserController {
     public ResponseEntity<?> authenticate(@RequestBody LoginRequestDto dto){
         return new ResponseEntity<>(userDetailsService.authenticate(dto), HttpStatus.OK);
     }
-    @GetMapping
-    public ResponseEntity<?> getUsers(){
-        return new ResponseEntity<>(appUserService.getUsers(), HttpStatus.OK);
+    @GetMapping("/filter-by-huddle/{huddleUuid}")
+    public ResponseEntity<?> getUsers(@PathVariable("huddleUuid")UUID huddleUuid){
+        return new ResponseEntity<>(appUserService.getUsersNotInAHuddle(huddleUuid), HttpStatus.OK);
     }
 }

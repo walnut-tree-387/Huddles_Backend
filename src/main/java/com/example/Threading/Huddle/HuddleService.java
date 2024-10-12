@@ -12,4 +12,5 @@ public interface HuddleService {
     List<HuddleGetDto> getHuddles();
     void addUsersToHuddle(HuddleUpdateDto updateDto);
     Huddle getById(UUID uuid);
+    List<HuddleGetDto> getAllHuddlesOfLoggedInUser(UUID userUuid);
 }

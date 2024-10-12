@@ -9,4 +9,5 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 public class HuddleGetDto extends HuddleBaseDto{
     private UUID uuid;
+    private Long members;
 }

@@ -27,7 +27,7 @@ public class HuddleController {
 
     @GetMapping
     public ResponseEntity<?> getHuddles() {
-        return new ResponseEntity<>(huddleService.getHuddles(), HttpStatus.OK);
+        return new ResponseEntity<>(huddleService.getHuddles(appUserService.getCurrentUser().getUuid()), HttpStatus.OK);
     }
     @GetMapping("/my-huddles")
     public ResponseEntity<?> getMyHuddles() {

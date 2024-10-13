@@ -16,6 +16,7 @@ import java.util.UUID;
 public class HuddleServiceImpl implements HuddleService{
     private final HuddleRepository huddleRepository;
     private final HuddleMemberService huddleMemberService;
+
     public HuddleServiceImpl(HuddleRepository huddleRepository, HuddleMemberService huddleMemberService) {
         this.huddleRepository = huddleRepository;
         this.huddleMemberService = huddleMemberService;
@@ -31,8 +32,13 @@ public class HuddleServiceImpl implements HuddleService{
     }
 
     @Override
-    public List<HuddleGetDto> getHuddles() {
-        return SystemMapper.toDtoList(huddleRepository.findAll(), HuddleGetDto.class);
+    public List<HuddleGetDto> getHuddles(UUID loggedInUserUuid) {
+        List<HuddleGetDto> huddles = SystemMapper.toDtoList(huddleRepository.findAll(), HuddleGetDto.class);
+        huddles.forEach(huddle -> {
+            huddle.setMembers(huddleMemberService.getHuddleUsers(huddle.getUuid()).stream().count());
+            huddle.setIsLoggedInUserAMember(huddleMemberService.checkIfAlreadyExist(loggedInUserUuid, huddle.getUuid()));
+        });
+        return huddles;
     }
 
     @Override

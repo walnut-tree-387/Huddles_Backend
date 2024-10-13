@@ -13,4 +13,5 @@ public interface HuddleMemberService {
     void addNewUsers(List<AppUserCreateDto> users, Huddle huddle);
     void removeUser(UUID userUuid, UUID huddleUuid);
     void addCurrentUserToHuddleAsCreator(Huddle huddle);
+    Boolean checkIfAlreadyExist(UUID userUuid, UUID huddleUuid);
 }

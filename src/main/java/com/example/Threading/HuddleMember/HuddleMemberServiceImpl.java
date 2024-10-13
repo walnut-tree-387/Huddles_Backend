@@ -62,7 +62,8 @@ public class HuddleMemberServiceImpl implements HuddleMemberService{
         huddleMember.setJoinedAt(Instant.now().getEpochSecond());
         huddleMemberRepository.save(huddleMember);
     }
-    private Boolean checkIfAlreadyExist(UUID uuid, UUID huddleUuid){
-        return huddleMemberRepository.userExistInHuddle(uuid, huddleUuid);
+    @Override
+    public Boolean checkIfAlreadyExist(UUID uuid, UUID huddleUuid){
+        return huddleMemberRepository.userExistInHuddle(huddleUuid, uuid);
     }
 }

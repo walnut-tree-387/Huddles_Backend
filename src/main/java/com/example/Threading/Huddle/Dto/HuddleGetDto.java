@@ -10,4 +10,5 @@ import java.util.UUID;
 public class HuddleGetDto extends HuddleBaseDto{
     private UUID uuid;
     private Long members;
+    private Boolean isLoggedInUserAMember = false;
 }

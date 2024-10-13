@@ -35,4 +35,5 @@ public interface HuddleMemberRepository extends JpaRepository<HuddleMember, UUID
         String getName();
         UUID getMemberUuid();
     }
+
 }

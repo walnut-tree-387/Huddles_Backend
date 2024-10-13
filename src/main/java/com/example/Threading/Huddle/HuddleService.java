@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface HuddleService {
     void create(HuddleCreateDto createDto);
-    List<HuddleGetDto> getHuddles();
+    List<HuddleGetDto> getHuddles(UUID currentUserUuid);
     void addUsersToHuddle(HuddleUpdateDto updateDto);
     Huddle getById(UUID uuid);
     List<HuddleGetDto> getAllHuddlesOfLoggedInUser(UUID userUuid);

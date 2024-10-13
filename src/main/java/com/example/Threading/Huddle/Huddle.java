@@ -20,6 +20,5 @@ public class Huddle {
     private UUID uuid;
     private String name;
     private String avatar;
-
     private Long members;
 }

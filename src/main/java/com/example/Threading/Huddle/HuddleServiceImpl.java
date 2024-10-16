@@ -6,6 +6,7 @@ import com.example.Threading.Huddle.Dto.HuddleGetDto;
 import com.example.Threading.Huddle.Dto.HuddleUpdateDto;
 import com.example.Threading.HuddleMember.HuddleMemberService;
 import com.example.Threading.Users.AppUser;
+import com.example.Threading.Users.AppUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +17,12 @@ import java.util.UUID;
 public class HuddleServiceImpl implements HuddleService{
     private final HuddleRepository huddleRepository;
     private final HuddleMemberService huddleMemberService;
+    private final AppUserService userService;
 
-    public HuddleServiceImpl(HuddleRepository huddleRepository, HuddleMemberService huddleMemberService) {
+    public HuddleServiceImpl(HuddleRepository huddleRepository, HuddleMemberService huddleMemberService, AppUserService userService) {
         this.huddleRepository = huddleRepository;
         this.huddleMemberService = huddleMemberService;
+        this.userService = userService;
     }
 
     @Override
@@ -27,6 +30,7 @@ public class HuddleServiceImpl implements HuddleService{
         Huddle huddle = new Huddle();
         huddle.setName(createDto.getName());
         huddle = huddleRepository.save(huddle);
+        huddle.setCreator(userService.getCurrentUser());
         huddleMemberService.addNewUsers(createDto.getNewUsers(), huddle);
         huddleMemberService.addCurrentUserToHuddleAsCreator(huddle);
     }

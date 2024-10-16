@@ -15,13 +15,22 @@ public class ThreadingApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ThreadingApplication.class, args);
 	}
-	@Bean(name = "taskExecutor")
-	public Executor taskExecutor() {
+//	@Bean(name = "taskExecutor")
+//	public Executor taskExecutor() {
+//		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+//		executor.setCorePoolSize(4);
+//		executor.setMaxPoolSize(8);
+//		executor.setQueueCapacity(500);
+//		executor.setThreadNamePrefix("CustomAsyncThread-");
+//		executor.initialize();
+//		return executor;
+//	}
+	@Bean(name = "notificationExecutor")
+	public Executor notificationExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(4);
-		executor.setMaxPoolSize(8);
+		executor.setCorePoolSize(2);
+		executor.setMaxPoolSize(5);
 		executor.setQueueCapacity(500);
-		executor.setThreadNamePrefix("CustomAsyncThread-");
 		executor.initialize();
 		return executor;
 	}

@@ -5,9 +5,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -21,4 +18,8 @@ public class Huddle {
     private String name;
     private String avatar;
     private Long members;
+
+    @OneToOne
+    @JoinColumn(name = "creator_id")
+    private AppUser creator;
 }

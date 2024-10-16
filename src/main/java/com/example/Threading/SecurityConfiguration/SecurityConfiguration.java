@@ -37,7 +37,7 @@ public class SecurityConfiguration{
 //                .exceptionHandling(eH -> eH.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/api/users/authenticate", "/api/users/register").permitAll()
+                                .requestMatchers("/api/users/authenticate", "/api/users/register", "/ws/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

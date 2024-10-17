@@ -40,7 +40,7 @@ public class HuddleServiceImpl implements HuddleService{
         List<HuddleGetDto> huddles = SystemMapper.toDtoList(huddleRepository.findAll(), HuddleGetDto.class);
         huddles.forEach(huddle -> {
             huddle.setMembers(huddleMemberService.getHuddleUsers(huddle.getUuid()).stream().count());
-            huddle.setIsLoggedInUserAMember(huddleMemberService.checkIfAlreadyExist(loggedInUserUuid, huddle.getUuid()));
+            huddle.setRelation(huddleMemberService.getHuddleMemberRelation(getById(huddle.getUuid())));
         });
         return huddles;
     }

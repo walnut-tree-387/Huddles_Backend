@@ -1,5 +1,6 @@
 package com.example.Threading.Huddle.Dto;
 
+import com.example.Threading.HuddleMember.Dto.HuddleMemberRelation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,5 +11,5 @@ import java.util.UUID;
 public class HuddleGetDto extends HuddleBaseDto{
     private UUID uuid;
     private Long members;
-    private Boolean isLoggedInUserAMember = false;
+    private HuddleMemberRelation relation;
 }

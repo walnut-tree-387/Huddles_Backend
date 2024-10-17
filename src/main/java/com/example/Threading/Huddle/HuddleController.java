@@ -62,8 +62,14 @@ public class HuddleController {
     }
     @PostMapping("/{uuid}/add-request")
     public ResponseEntity<?> createAddRequestToHuddle(@PathVariable("uuid") UUID uuid){
+        huddleMemberService.createHuddleMemberRequest(huddleService.getById(uuid));
         eventService.create(HuddleEventType.MEMBER_REQUEST, "Sent a huddle member request",
                 appUserService.getCurrentUser(), huddleService.getById(uuid));
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @PostMapping("/{huddleUuid}/member-relation")
+    public ResponseEntity<?> getHuddleMemberRelation(@PathVariable("huddleUuid") UUID huddleUuid){
+        return new ResponseEntity<>(huddleMemberService
+                .getHuddleMemberRelation(huddleService.getById(huddleUuid)), HttpStatus.OK);
     }
 }

@@ -18,7 +18,10 @@ public class HuddleMember {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID uuid;
     private Long joinedAt;
+    @Enumerated(EnumType.STRING)
     private HuddleRole huddleRole;
+    @Enumerated(EnumType.STRING)
+    private HuddleMemberStatus huddleMemberStatus;
     @ManyToOne()
     @JsonIgnore
     @JoinColumn(name = "member_uuid")

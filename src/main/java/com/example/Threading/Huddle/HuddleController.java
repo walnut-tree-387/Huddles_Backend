@@ -4,9 +4,10 @@ import com.example.Threading.Helpers.SystemMapper;
 import com.example.Threading.Huddle.Dto.HuddleCreateDto;
 import com.example.Threading.Huddle.Dto.HuddleGetDto;
 import com.example.Threading.Huddle.Dto.HuddleUpdateDto;
+import com.example.Threading.HuddleEvent.HuddleEventService;
+import com.example.Threading.HuddleEvent.HuddleEventType;
 import com.example.Threading.HuddleMember.HuddleMemberService;
 import com.example.Threading.Users.AppUserService;
-import com.example.Threading.Users.Dto.AppUserGetDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,12 @@ public class HuddleController {
     private final HuddleService huddleService;
     private final HuddleMemberService huddleMemberService;
     private final AppUserService appUserService;
-    public HuddleController(HuddleService huddleService, HuddleMemberService huddleMemberService, AppUserService appUserService) {
+    private final HuddleEventService eventService;
+    public HuddleController(HuddleService huddleService, HuddleMemberService huddleMemberService, AppUserService appUserService, HuddleEventService eventService) {
         this.huddleService = huddleService;
         this.huddleMemberService = huddleMemberService;
         this.appUserService = appUserService;
+        this.eventService = eventService;
     }
 
     @GetMapping
@@ -56,5 +59,17 @@ public class HuddleController {
     @GetMapping("/{uuid}")
     public ResponseEntity<?> getHuddle(@PathVariable("uuid") UUID uuid){
         return new ResponseEntity<>(SystemMapper.toDto(huddleService.getById(uuid), HuddleGetDto.class), HttpStatus.OK);
+    }
+    @PostMapping("/{uuid}/add-request")
+    public ResponseEntity<?> createAddRequestToHuddle(@PathVariable("uuid") UUID uuid){
+        huddleMemberService.createHuddleMemberRequest(huddleService.getById(uuid));
+        eventService.create(HuddleEventType.MEMBER_REQUEST, "Sent a huddle member request",
+                appUserService.getCurrentUser(), huddleService.getById(uuid));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @PostMapping("/{huddleUuid}/member-relation")
+    public ResponseEntity<?> getHuddleMemberRelation(@PathVariable("huddleUuid") UUID huddleUuid){
+        return new ResponseEntity<>(huddleMemberService
+                .getHuddleMemberRelation(huddleService.getById(huddleUuid)), HttpStatus.OK);
     }
 }

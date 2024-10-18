@@ -57,7 +57,10 @@
 			<version>4.0.1</version>
 			<scope>provided</scope>
 		</dependency>
-		<!--Dependency for JWT token creation-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>

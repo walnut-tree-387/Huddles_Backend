@@ -17,7 +17,8 @@ public interface HuddleMemberRepository extends JpaRepository<HuddleMember, UUID
     @Query("SELECT hm FROM HuddleMember hm WHERE hm.huddle.uuid = :huddleUuid AND hm.huddleMemberStatus = :status")
     List<HuddleMember> getMembersByIdHuddleUuid(@Param("huddleUuid") UUID huddleUuid,
                                                 @Param("status") HuddleMemberStatus status);
-    Optional<HuddleMember> findHuddleMemberByHuddleAndMember(Huddle huddle, AppUser member);
+    Optional<HuddleMember> findTopByHuddleAndMemberOrderByJoinedAtDesc(Huddle huddle, AppUser member);
+
     @Query("    SELECT hm.joinedAt as joinedAt, hm.huddleRole as huddleRole, appUser.name as name, appUser.uuid as memberUuid" +
             "   FROM HuddleMember hm" +
             "   JOIN AppUser appUser ON appUser.uuid = hm.member.uuid" +
@@ -35,13 +36,25 @@ public interface HuddleMemberRepository extends JpaRepository<HuddleMember, UUID
     Boolean userExistInHuddle(@Param("huddleUuid") UUID huddleUuid,
                               @Param("userUuid") UUID userUuid,
                               @Param("status") HuddleMemberStatus status);
-
-
+    @Query("SELECT appUser as huddleMember" +
+            " FROM HuddleMember hm" +
+            "  JOIN AppUser appUser ON appUser.uuid = hm.member.uuid" +
+            "   WHERE hm.huddle.uuid = :huddleUuid AND hm.huddleMemberStatus = :status")
+    List<huddleJoinRequest> findByHuddleMemberStatus(@Param("huddleUuid") UUID huddleUuid,
+                                                @Param("status") HuddleMemberStatus status);
+    @Query("Select hm from HuddleMember hm WHERE hm.huddle.uuid = :huddleUuid AND hm.member.uuid = :memberUuid " +
+            " AND hm.huddleMemberStatus = :huddleMemberStatus")
+    Optional<HuddleMember> findHuddleMemberByHuddleAndMember(@Param("huddleUuid") UUID huddleUuid,
+                                                             @Param("memberUuid") UUID memberUuid,
+                                                             @Param("huddleMemberStatus") HuddleMemberStatus huddleMemberStatus);
     interface huddleMember {
         Long getJoinedAt();
         HuddleRole getHuddleRole();
         String getName();
         UUID getMemberUuid();
+    }
+    interface huddleJoinRequest{
+        AppUser getHuddleMember();
     }
 
 }

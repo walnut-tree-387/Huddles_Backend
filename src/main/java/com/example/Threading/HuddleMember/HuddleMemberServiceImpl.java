@@ -86,7 +86,7 @@ public class HuddleMemberServiceImpl implements HuddleMemberService{
     @Override
     public HuddleMemberRelation getHuddleMemberRelation(Huddle huddle) {
         Optional<HuddleMember> huddleMemberOptional = huddleMemberRepository
-                .findHuddleMemberByHuddleAndMember(huddle, userDetailsService.getLoggedInUser());
+                .findTopByHuddleAndMemberOrderByJoinedAtDesc(huddle, userDetailsService.getLoggedInUser());
         if(huddleMemberOptional.isEmpty()){
             return new HuddleMemberRelation().setHuddleUuid(huddle.getUuid())
                     .setMemberUuid(userDetailsService.getLoggedInUser().getUuid());
@@ -96,5 +96,31 @@ public class HuddleMemberServiceImpl implements HuddleMemberService{
                     .setMemberUuid(userDetailsService.getLoggedInUser().getUuid())
                     .setStatus(huddleMemberOptional.get().getHuddleMemberStatus());
         }
+    }
+
+    @Override
+    public List<HuddleMemberRepository.huddleJoinRequest> getJoinRequests(UUID huddleUuid) {
+        return huddleMemberRepository.findByHuddleMemberStatus(huddleUuid, HuddleMemberStatus.REQUESTED);
+    }
+
+    @Override
+    public HuddleMember getHuddleMemberEntry(UUID huddleUuid, UUID userUuid, HuddleMemberStatus huddleMemberStatus) {
+        Optional<HuddleMember> optional = huddleMemberRepository.findHuddleMemberByHuddleAndMember(
+                huddleUuid, userUuid, huddleMemberStatus
+        );
+        if(optional.isEmpty()) throw new RuntimeException("Huddle member not found");
+        return optional.get();
+    }
+
+    @Override
+    public void processHuddleMemberRequest(Huddle huddle, AppUser user, String action) {
+        HuddleMember huddleMember = getHuddleMemberEntry(huddle.getUuid(), user.getUuid(), HuddleMemberStatus.REQUESTED);
+        if(action.equals("ACCEPT")){
+            huddleMember.setHuddleMemberStatus(HuddleMemberStatus.JOINED);
+        }
+        else if(action.equals("DENIED")){
+            huddleMember.setHuddleMemberStatus(HuddleMemberStatus.DENIED);
+        }
+        huddleMemberRepository.save(huddleMember);
     }
 }

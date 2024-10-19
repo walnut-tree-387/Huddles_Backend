@@ -7,6 +7,7 @@ import com.example.Threading.Huddle.Dto.HuddleUpdateDto;
 import com.example.Threading.HuddleEvent.HuddleEventService;
 import com.example.Threading.HuddleEvent.HuddleEventType;
 import com.example.Threading.HuddleMember.HuddleMemberService;
+import com.example.Threading.HuddleMember.HuddleMemberStatus;
 import com.example.Threading.Users.AppUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,9 +68,22 @@ public class HuddleController {
                 appUserService.getCurrentUser(), huddleService.getById(uuid));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+    @PutMapping("/{uuid}/process-request")
+    public ResponseEntity<?> processRequestToHuddle(@PathVariable("uuid") UUID uuid,
+                                                    @RequestParam("memberUuid") UUID memberUuid,
+                                                    @RequestParam("action")String action){
+        huddleMemberService.processHuddleMemberRequest(huddleService.getById(uuid),
+                appUserService.getUserByUuid(memberUuid), action);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
     @PostMapping("/{huddleUuid}/member-relation")
     public ResponseEntity<?> getHuddleMemberRelation(@PathVariable("huddleUuid") UUID huddleUuid){
         return new ResponseEntity<>(huddleMemberService
                 .getHuddleMemberRelation(huddleService.getById(huddleUuid)), HttpStatus.OK);
+    }
+    @GetMapping("/{huddleUuid}/join-request-list")
+    public ResponseEntity<?> getHuddleJoinRequests(@PathVariable("huddleUuid") UUID huddleUuid){
+        return new ResponseEntity<>(huddleMemberService
+                .getJoinRequests(huddleUuid), HttpStatus.OK);
     }
 }

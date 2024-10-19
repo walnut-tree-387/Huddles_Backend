@@ -17,4 +17,7 @@ public interface HuddleMemberService {
     Boolean checkIfAlreadyExist(UUID userUuid, UUID huddleUuid);
     void createHuddleMemberRequest(Huddle huddle);
     HuddleMemberRelation getHuddleMemberRelation(Huddle huddle);
+    List<HuddleMemberRepository.huddleJoinRequest> getJoinRequests(UUID huddleUuid);
+    void processHuddleMemberRequest(Huddle huddle, AppUser user, String action);
+    HuddleMember getHuddleMemberEntry(UUID huddleUuid, UUID userUuid, HuddleMemberStatus huddleMemberStatus);
 }

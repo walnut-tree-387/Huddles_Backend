@@ -25,11 +25,12 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public void create(AppUserCreateDto createDto) {
+    public AppUserGetDto create(AppUserCreateDto createDto) {
         AppUser user = SystemMapper.toEntity(createDto, AppUser.class);
         user.setVersion(user.getVersion() + 1);
         user.setUserRole(UserRole.COMMONER);
-        appUserRepository.save(user);
+        user = appUserRepository.save(user);
+        return SystemMapper.toDto(user, AppUserGetDto.class);
     }
 
     @Override

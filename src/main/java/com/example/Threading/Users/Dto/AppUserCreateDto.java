@@ -9,4 +9,5 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 public class AppUserCreateDto extends AppUserBaseDto{
     private UUID uuid;
+    private String password;
 }

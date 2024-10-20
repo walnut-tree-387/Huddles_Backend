@@ -21,8 +21,7 @@ public class AppUserController {
     }
     @PostMapping("/register")
     public ResponseEntity<?> create(@RequestBody AppUserCreateDto appUser) {
-        appUserService.create(appUser);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(appUserService.create(appUser), HttpStatus.CREATED);
     }
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(@RequestBody LoginRequestDto dto){

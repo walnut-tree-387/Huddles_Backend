@@ -5,6 +5,7 @@ import com.example.Threading.Users.AppUser;
 import com.example.Threading.Users.AppUserDetailsService;
 import com.example.Threading.Users.AppUserService;
 import com.example.Threading.Users.Dto.AppUserCreateDto;
+import com.example.Threading.exception.types.HuddleNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -108,7 +109,7 @@ public class HuddleMemberServiceImpl implements HuddleMemberService{
         Optional<HuddleMember> optional = huddleMemberRepository.findHuddleMemberByHuddleAndMember(
                 huddleUuid, userUuid, huddleMemberStatus
         );
-        if(optional.isEmpty()) throw new RuntimeException("Huddle member not found");
+        if(optional.isEmpty()) throw new HuddleNotFoundException(HuddleMemberServiceImpl.class, "Huddle member not found");
         return optional.get();
     }
 

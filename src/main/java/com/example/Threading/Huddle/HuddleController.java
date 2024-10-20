@@ -7,7 +7,6 @@ import com.example.Threading.Huddle.Dto.HuddleUpdateDto;
 import com.example.Threading.HuddleEvent.HuddleEventService;
 import com.example.Threading.HuddleEvent.HuddleEventType;
 import com.example.Threading.HuddleMember.HuddleMemberService;
-import com.example.Threading.HuddleMember.HuddleMemberStatus;
 import com.example.Threading.Users.AppUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -7,8 +7,12 @@ import com.example.Threading.Huddle.Dto.HuddleUpdateDto;
 import com.example.Threading.HuddleMember.HuddleMemberService;
 import com.example.Threading.Users.AppUser;
 import com.example.Threading.Users.AppUserService;
+import com.example.Threading.exception.HuddleExceptionMessages;
+import com.example.Threading.exception.types.HuddleMappingException;
+import com.example.Threading.exception.types.HuddleNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,9 +41,14 @@ public class HuddleServiceImpl implements HuddleService{
 
     @Override
     public List<HuddleGetDto> getHuddles(UUID loggedInUserUuid) {
-        List<HuddleGetDto> huddles = SystemMapper.toDtoList(huddleRepository.findAll(), HuddleGetDto.class);
+        List<HuddleGetDto> huddles;
+        try{
+            huddles = SystemMapper.toDtoList(huddleRepository.findAll(), HuddleGetDto.class);
+        }catch (Exception exception){
+            throw new HuddleMappingException(HuddleServiceImpl.class, HuddleExceptionMessages.MAPPING_ERROR_ENTITY_TO_DTO);
+        }
         huddles.forEach(huddle -> {
-            huddle.setMembers(huddleMemberService.getHuddleUsers(huddle.getUuid()).stream().count());
+            huddle.setMembers((long) huddleMemberService.getHuddleUsers(huddle.getUuid()).size());
             huddle.setRelation(huddleMemberService.getHuddleMemberRelation(getById(huddle.getUuid())));
         });
         return huddles;
@@ -54,12 +63,18 @@ public class HuddleServiceImpl implements HuddleService{
     @Override
     public Huddle getById(UUID uuid) {
         Optional<Huddle> huddleOptional = huddleRepository.findById(uuid);
-        if(huddleOptional.isEmpty()) throw new RuntimeException("Huddle couldn't be found with this uuid " + uuid);
+        if(huddleOptional.isEmpty()) throw new HuddleNotFoundException(HuddleServiceImpl.class, "Huddle couldn't be found with this uuid " + uuid);
         return huddleOptional.get();
     }
 
     @Override
     public List<HuddleGetDto> getAllHuddlesOfLoggedInUser(UUID userUuid) {
-        return SystemMapper.toDtoList(huddleRepository.findUserHuddles(userUuid), HuddleGetDto.class);
+        List<HuddleGetDto> response;
+        try{
+            response = SystemMapper.toDtoList(huddleRepository.findUserHuddles(userUuid), HuddleGetDto.class);
+        }catch (Exception exception){
+            throw new HuddleMappingException(HuddleServiceImpl.class, HuddleExceptionMessages.MAPPING_ERROR_ENTITY_TO_DTO);
+        }
+        return response;
     }
 }

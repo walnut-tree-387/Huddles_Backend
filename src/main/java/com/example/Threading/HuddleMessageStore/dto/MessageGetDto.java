@@ -14,4 +14,5 @@ public class MessageGetDto extends MessageBaseDto{
     private HuddleMemberGetDto createdBy;
     private Long createdAt;
     private Long updatedAt;
+    private boolean isOutgoing;
 }

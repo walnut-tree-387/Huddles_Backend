@@ -20,4 +20,5 @@ public interface HuddleMemberService {
     List<HuddleMemberRepository.huddleJoinRequest> getJoinRequests(UUID huddleUuid);
     void processHuddleMemberRequest(Huddle huddle, AppUser user, String action);
     HuddleMember getHuddleMemberEntry(UUID huddleUuid, UUID userUuid, HuddleMemberStatus huddleMemberStatus);
+    HuddleMember getByUuid(UUID uuid);
 }

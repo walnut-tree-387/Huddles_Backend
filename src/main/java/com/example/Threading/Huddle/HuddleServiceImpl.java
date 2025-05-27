@@ -10,6 +10,7 @@ import com.example.Threading.Users.AppUserService;
 import com.example.Threading.exception.HuddleExceptionMessages;
 import com.example.Threading.exception.types.HuddleMappingException;
 import com.example.Threading.exception.types.HuddleNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class HuddleServiceImpl implements HuddleService{
         this.userService = userService;
     }
 
+    @Transactional
     @Override
     public void create(HuddleCreateDto createDto) {
         Huddle huddle = new Huddle();

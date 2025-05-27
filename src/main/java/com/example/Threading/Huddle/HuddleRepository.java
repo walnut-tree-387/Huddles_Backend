@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface HuddleRepository extends JpaRepository<Huddle, UUID> {
     @Query("SELECT huddle FROM Huddle huddle " +
             "JOIN HuddleMember hm ON hm.huddle = huddle " +
-            "WHERE hm.member.uuid = :userUuid")
+            "WHERE hm.member.uuid = :userUuid AND hm.huddleMemberStatus = 'JOINED'")
     List<Huddle> findUserHuddles(@Param("userUuid") UUID userUuid);
 
 }

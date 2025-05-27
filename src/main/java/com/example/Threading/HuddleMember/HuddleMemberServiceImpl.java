@@ -114,6 +114,15 @@ public class HuddleMemberServiceImpl implements HuddleMemberService{
     }
 
     @Override
+    public HuddleMember getByUuid(UUID uuid) {
+        Optional<HuddleMember> huddleMemberOptional = huddleMemberRepository.findById(uuid);
+        if(huddleMemberOptional.isEmpty()){
+            throw new RuntimeException("Huddle member not found");
+        }
+        return huddleMemberOptional.get();
+    }
+
+    @Override
     public void processHuddleMemberRequest(Huddle huddle, AppUser user, String action) {
         HuddleMember huddleMember = getHuddleMemberEntry(huddle.getUuid(), user.getUuid(), HuddleMemberStatus.REQUESTED);
         if(action.equals("ACCEPT")){

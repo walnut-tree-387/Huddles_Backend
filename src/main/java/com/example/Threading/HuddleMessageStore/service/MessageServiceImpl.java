@@ -2,6 +2,7 @@ package com.example.Threading.HuddleMessageStore.service;
 
 import com.example.Threading.Helpers.SystemMapper;
 import com.example.Threading.Huddle.HuddleService;
+import com.example.Threading.HuddleMember.HuddleMember;
 import com.example.Threading.HuddleMember.HuddleMemberService;
 import com.example.Threading.HuddleMember.HuddleMemberStatus;
 import com.example.Threading.HuddleMessageStore.dto.MessageCreateDto;
@@ -44,9 +45,14 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Page<MessageGetDto> getHuddleMessages(UUID huddleUuid, int pageSize, int pageNumber) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Sort sort = Sort.by(Sort.Direction.ASC, "createdAt");
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Message> messages = messageRepository.getMessages(pageable, huddleUuid);
-        return new PageImpl<>(SystemMapper.toDtoList(messages.getContent(), MessageGetDto.class));
+        Page<MessageGetDto> responses = new PageImpl<>(SystemMapper.toDtoList(messages.getContent(), MessageGetDto.class));
+        for(MessageGetDto response: responses.getContent()){
+            HuddleMember member = huddleMemberService.getByUuid(response.getCreatedBy().getUuid());
+            response.setOutgoing(member.getMember().equals(appUserService.getCurrentUser()));
+        }
+        return responses;
     }
 }

@@ -19,7 +19,7 @@ public class Huddle {
     private String avatar;
     private Long members;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "creator_id")
     private AppUser creator;
 }
